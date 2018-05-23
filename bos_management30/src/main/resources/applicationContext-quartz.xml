@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		">
+	
+	<!-- 第一步：加载任务类 -->
+	<bean id="jobDetail"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="cn.itcast.bos.job.BosJob" />
+	</bean>
+	<!-- 第二步： 定义触发器，并且让 触发器关联 任务 -->
+	<bean id="simpleTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail" />
+		<!-- 触发器的执行策略：3 seconds 后开始执行一次 -->
+		<property name="startDelay" value="3000" />
+		<!-- 每 5小时重复执行1次 -->
+		<property name="repeatInterval" value="18000000" />
+	</bean>
+
+	
+	<!-- 第三步：执行触发器 -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<!-- 手动完成让spring管理任务调度的job -->
+		<property name="jobFactory" ref="jobFactory"></property>
+		<property name="triggers">
+			<list>
+				<ref bean="simpleTrigger" />
+			</list>
+		</property>
+	</bean>
+</beans>

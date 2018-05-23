@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/easyui/locale/easyui-lang-zh_CN.js"></script>
+<link rel="stylesheet" href="../js/easyui/themes/default/easyui.css" />
+<link rel="stylesheet" href="../js/easyui/themes/icon.css" />
+<!--ztree-->
+<script src="../js/ztree/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="../js/ztree/zTreeStyle.css" />
+<script>
+	$(function() {
+		// 自定义验证规则
+		$.extend($.fn.validatebox.defaults.rules, {    
+		    minLength: {    
+		    	// 验证规则
+		        validator: function(value, param){   
+		        	// 参数一：输入的值；第二个参数：验证的参数
+		        	//alert(value+"    "+param);
+		            return value.length >= param[0];    
+		        },    
+		        // 错误信息
+		        message: '请输入至少 {0} 字符.'   
+		    }    
+		});  
+		
+		$("#btn").click(function() {
+			if($("#myform").form("validate")){
+				// 提交表单
+				$("#myform").submit();
+			}
+			else{
+				$.messager.alert("警告","当前表单存在未校验通过的元素","warning");
+			}
+		})
+	})
+</script>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<form id="myform" name="myform" action="http://www.itcast.cn" method="post">
+			<input id="name" name="name" class="easyui-validatebox" data-options="required:true" />  <br>
+			邮箱验证：<input type="text" name="email" class="easyui-validatebox" validtype="email" required="true" missingMessage="不能为空" invalidMessage="邮箱格式不正确" /><br/>  
+			网址验证：<input type="text" name="url" class="easyui-validatebox" validtype="url" required="true" missingMessage="不能为空"/><br/>  
+			长度验证：<input type="text" name="length" class="easyui-validatebox" validtype="length[8,20]" required="true" missingMessage="不能为空" invalidMessage="有效长度8-20"/><br/>  
+			<!--远程验证：<input type="text" name="remote" class="easyui-validatebox" validtype="remote['../standard_validate.action','name']" required="true" missingMessage="不能为空" invalidMessage="用户名已存在"/><br/> -->
+			自定义验证规则：<input class="easyui-validatebox" data-options="required:true,validType:'minLength[5]'">  <br>
+			数字校验框：<input type="text" class="easyui-numberbox" value="100" data-options="min:0,precision:2"></input>  <br>
+			日期输入框：<input id="dd" type="text" class="easyui-datebox" required="required"></input>  <br>
+			多校验：<input type="text" name="many" class="easyui-validatebox" data-options="required:true,validType:['email','length[10,20]']"/><br/>
+			下来列表框：
+			<select id="cc" class="easyui-combobox" name="dept" style="width:200px;" required="required">   
+				<option value=""></option>   
+			    <option value="aa">aitem1</option>   
+			    <option>bitem2</option>   
+			    <option>bitem3</option>   
+			    <option>ditem4</option>   
+			    <option>eitem5</option>   
+			</select>  
+			<br>
+			<br>
+			<a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">提交</a>
+		</form>
+		
+	</body>
+
+</html>

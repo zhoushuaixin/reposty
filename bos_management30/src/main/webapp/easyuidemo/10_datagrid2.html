@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/easyui/locale/easyui-lang-zh_CN.js"></script>
+<link rel="stylesheet" href="../js/easyui/themes/default/easyui.css" />
+<link rel="stylesheet" href="../js/easyui/themes/icon.css" />
+<!--ztree-->
+<script src="../js/ztree/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="../js/ztree/zTreeStyle.css" />
+<script>
+	$(function() {
+		$('#grid').datagrid({
+			url: './data.json',
+			iconCls : 'icon-forward',
+			fit : true,
+			border : false,
+			rownumbers : true,
+			striped : true,
+			pageList: [30,50,100],
+			pagination : true,
+			columns: [
+				[{
+					field: 'id',
+					title: '编号',
+					width: 100
+				}, {
+					field: 'name',
+					title: '名称',
+					width: 200
+				}, {
+					field: 'price',
+					title: '价格',
+					width: 100,
+					align: 'right'
+				}]
+			],
+			toolbar: [{
+				iconCls: 'icon-add',
+				text:'新增',
+				handler: function(){alert('新增按钮')}
+			},'-',{
+				iconCls: 'icon-edit',
+				text:'编辑',
+				handler: function(){alert('编辑按钮')}
+			},'-',{
+				iconCls: 'icon-cancel',
+				text:'取消',
+				handler: function(){alert('取消按钮')}
+			}]
+			
+
+		});
+
+	})
+</script>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<table id="grid">
+		</table>
+	</body>
+
+</html>

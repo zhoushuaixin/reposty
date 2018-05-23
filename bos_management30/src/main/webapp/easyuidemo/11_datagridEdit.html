@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/easyui/locale/easyui-lang-zh_CN.js"></script>
+<link rel="stylesheet" href="../js/easyui/themes/default/easyui.css" />
+<link rel="stylesheet" href="../js/easyui/themes/icon.css" />
+<!--ztree-->
+<script src="../js/ztree/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="../js/ztree/zTreeStyle.css" />
+<script>
+	$(function() {
+		var currentEditIndex = undefined;
+		$('#grid').datagrid({
+			url: './data.json',
+			iconCls : 'icon-forward',
+			fit : true,
+			border : false,
+			rownumbers : true,
+			striped : true,
+			pageList: [30,50,100],
+			pagination : true,
+			singleSelect : true,
+			columns: [
+				[{
+					field: 'id',
+					title: '编号',
+					width: 100,
+					editor:{
+						type:"validatebox",
+						options:{
+							required:true
+						}
+					}
+				}, {
+					field: 'name',
+					title: '名称',
+					width: 200,
+					editor:{
+						type:"validatebox",
+						options:{
+							required:true
+						}
+					}
+				}, {
+					field: 'price',
+					title: '价格',
+					width: 100,
+					align: 'right',
+					editor:{
+						type:"validatebox",
+						options:{
+							required:true
+						}
+					}
+				}]
+			],
+			toolbar: [{
+				iconCls: 'icon-add',
+				text:'新增',
+				handler: function(){
+					//alert('新增按钮')
+					// 保证如果没有编辑完成， 不允许再添加
+					if(currentEditIndex!=undefined){
+						return;
+					}
+					// 在第一行的位置插入一个新行
+					$('#grid').datagrid('insertRow',{
+						index: 0,	// 索引从0开始
+						row: {} // 无值插入一行
+					});
+					// 开启编辑模式（第一行）
+					$("#grid").datagrid("beginEdit",0);
+					currentEditIndex = 0;
+				}
+			},'-',{
+				iconCls: 'icon-edit',
+				text:'编辑',
+				handler: function(){
+					//alert('编辑按钮')
+					// 保证如果没有编辑完成， 不允许再编辑
+					if(currentEditIndex!=undefined){
+						return;
+					}
+					// 获取当前选中的行
+					var row = $("#grid").datagrid("getSelected");
+					// 通过选中的行，获取选中的行的索引
+					var index = $("#grid").datagrid("getRowIndex",row);
+					// 开启编辑模式（第几行）
+					$("#grid").datagrid("beginEdit",index);
+					currentEditIndex = index;
+				}
+			},'-',{
+				iconCls: 'icon-save',
+				text:'保存',
+				handler: function(){
+					// alert('保存按钮')
+					// 结束编辑模式
+					$("#grid").datagrid("endEdit",currentEditIndex);
+				}
+			},'-',{
+				iconCls: 'icon-cancel',
+				text:'取消',
+				handler: function(){
+					// alert('取消按钮')
+					// 取消编辑模式
+					$("#grid").datagrid("cancelEdit",currentEditIndex);
+				}
+			}],
+			
+			onAfterEdit:function(rowIndex, rowData, changes){  // 在用户完成编辑一行的时候触发，参数包括
+				// alert(rowIndex+"   "+rowData+"   "+rowData.name);
+				// 使用ajax完成保存
+//				$.post("url",rowData,function(data){
+//					
+//				})
+				currentEditIndex = undefined;
+			},
+			onCancelEdit:function(rowIndex, rowData){ // 在用户取消编辑一行的时候触发
+				currentEditIndex = undefined;
+			}
+
+		});
+
+	})
+</script>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<table id="grid">
+		</table>
+	</body>
+
+</html>
